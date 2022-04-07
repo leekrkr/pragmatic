@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -9,9 +10,10 @@ from django.views.generic import CreateView
 
 from accountapp.models import HelloWorld
 
+has_ownership = [account_ownership_required, login_required]
 
+@login_required
 def hello_world(request):
-    return HttpResponse('Hello World')
 
     if request.method == "POST":
 
@@ -35,11 +37,14 @@ class AccountCreateView(CreateView):
     success_url = reverse_lazy('accountapp : hello_world')
     template_name = 'accountapp/create.html'
 
+
 class AccountDetailView(DetailView):
     model = User
     context_object_name = 'target_user'
     template_name = 'accountapp/detail.html'
 
+@method_decorator(has_ownership, 'get')
+@method_decorator(has_ownership, 'post')
 class AccountUpdateView(UpdateView):
     model = User
     context_object_name = 'target_user'
@@ -47,6 +52,9 @@ class AccountUpdateView(UpdateView):
     success_url = reverse_lazy('accountapp : hello_world')
     template_name = 'accountapp/update.html'
 
+
+@method_decorator(has_ownership, 'get')
+@method_decorator(has_ownership, 'post')
 class AccountDeleteView(Deleteview):
     model = User
     context_object_name = 'target_user'
