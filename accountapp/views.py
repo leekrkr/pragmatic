@@ -40,10 +40,15 @@ class AccountCreateView(CreateView):
     template_name = 'accountapp/create.html'
 
 
-class AccountDetailView(DetailView):
+class AccountDetailView(DetailView, MultipleObjectMixin):
     model = User
     context_object_name = 'target_user'
     template_name = 'accountapp/detail.html'
+
+    paginate_by = 25
+    def get_context_data(self, **kwargs):
+        object_list = Article.objects.filter(project=self.get_object())
+        return super(AccountDetailView, self).get_context_date(object_list=object_list, **kwargs)
 
 @method_decorator(has_ownership, 'get')
 @method_decorator(has_ownership, 'post')

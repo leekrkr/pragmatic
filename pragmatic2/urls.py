@@ -19,9 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('', ArticleListView.as_view(), name='home'),
+
     path('admin/', admin.site.urls),
     path('accounts/', include('accountapp.urls')),
     path('profiles/', include('profileapp.urls')),
     path('articles/', include('articleapp.urls')),
     path('comments/', include('commentapp.urls')),
+    path('project/', include('projectapp.urls')),
+    path('subscribe', include('subscibeapp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
